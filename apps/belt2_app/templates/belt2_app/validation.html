@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Welcome!</title>
+</head>
+<body>
+
+	<h2>Welcome!</h2>
+	<div id="register">
+		<h3>Register</h3>
+		<form action="{% url 'belt2:validation' %}" method="post">
+			{% csrf_token %}
+			<p>Name: <input type="text" name="name"></p>
+			<p>Email: <input type="text" name="email"></p>
+			<p>Password: <input type="text" name="password1"></p>
+			<p>Confirm Password: <input type="text" name="password2"></p>
+			<p>Date of Birth: <input type="date" name="dob"></p>
+			<input type="submit" name="Register">
+		</form>
+	</div>
+	{% if messages %}
+	<ul class="messages">
+	    {% for message in messages %}
+	    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	    {% endfor %}
+	</ul>
+	{% endif %}
+	<div id="login">
+		<h3>Login</h3>
+		<form action="{% url 'belt2:validation' %}" method="post">
+			{% csrf_token %}
+			<p>Email: <input type="text" name="email"></p>
+			<p>Password: <input type="text" name="password"></p>
+			<input type="submit" name="Login">
+		</form>
+	</div>
+
+</body>
+</html>

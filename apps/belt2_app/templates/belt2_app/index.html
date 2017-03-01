@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Your Appointments</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+		$(document).ready(function()
+   			{
+        	$("#myTable").tablesorter( {sortList: [[0,0], [1,0]]} );
+    		}
+    	);
+	</script>
+</head>
+<body>
+
+	<h3>Hello, {{request.session.name}}</h3>
+	<a href="{% url 'belt2:logout' %}">Logout</a>
+	<p>Here are your appointments for {{today}}</p>
+
+	<table class="table">
+		<tr>
+			<th>Tasks</th>
+			<th>Time</th>
+			<th>Status</th>
+			<th>Action</th>
+		</tr>
+
+		{% for apt in apts %}
+			{% if apt.date == today %}
+				<tr>
+					<td>{{apt.task}}</td>
+					<td>{{apt.time}}</td>
+					<td>{{apt.status}}</td>
+				{% if apt.status != done %}
+					<td><a href="{% url 'belt2:show' id=apt.id %}">Edit</a> | <a href="{% url 'belt2:destroy' id=apt.id %}">Delete</a></td>
+				{% endif %}
+				</tr>
+			{% endif %}
+		{% endfor %}
+	</table>
+	<p>Your Other Appointments: </p>
+	<table class="table">
+		<tr>
+			<th>Tasks</th>
+			<th>Date</th>
+			<th>Time</th>
+			<th>Delete</th>
+		</tr>
+		{% for apt in apts %}
+			{% if apt.date > today %}
+				<tr>
+					<td>{{apt.task}}</td>
+					<td>{{apt.date}}</td>
+					<td>{{apt.time}}</td>
+					<td><a href="{% url 'belt2:destroy' id=apt.id %}">Delete</a>
+				</tr>
+			{% endif %}
+		{% endfor %}
+	</table>
+
+	<div>
+		<h3>Add Appointment</h3>
+		<form action="{% url 'belt2:index' %}" method="post">
+			{% csrf_token %}
+			<p>Date: <input type="date" name="date"></p>
+			<p>Time: <input type="time" name="time"></p>
+			<p>Tasks <input type="text" name="task"></p>
+			<input type="submit" name="Add">
+		</form>
+	</div>
+	{% if messages %}
+	<ul class="messages">
+	    {% for message in messages %}
+	    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	    {% endfor %}
+	</ul>
+	{% endif %}
+</body>
+</html>

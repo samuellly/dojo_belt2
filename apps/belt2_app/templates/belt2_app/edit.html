@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Edit Appointment</title>
+</head>
+<body>
+
+	<div id="header">
+		<a href="{% url 'belt2:index' %}">Dashboard</a>
+		<a href="{% url 'belt2:logout' %}">Logout</a>
+	</div>
+
+	<form action="{% url 'belt2:show' id=apt.id %}" method="post">
+		{% csrf_token %}
+		<p>Tasks: <input type="text" name="task" placeholder="{{apt.task}}"></p>
+		<p>Status:
+			<select name="status">
+				<option>Done</option>
+				<option>Pending</option>
+				<option>Missed</option>
+			</select>
+		</p>
+		<p>Date: <input type="text" onfocus="(this.type='date')" name="date" placeholder="{{apt.date}}"></p>
+		<p>Time: <input type="text" onfocus="(this.type='time')" name="time" placeholder="{{apt.time}}"></p>
+		<input type="submit" name="Update">
+	</form>
+	{% if messages %}
+	<ul class="messages">
+	    {% for message in messages %}
+	    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	    {% endfor %}
+	</ul>
+	{% endif %}
+</body>
+</html>
